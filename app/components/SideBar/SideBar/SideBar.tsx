@@ -4,7 +4,6 @@ import { BsGearFill } from "react-icons/bs";
 import { IoPersonAdd } from "react-icons/io5";
 import { TbMessageCircle2Filled } from "react-icons/tb"; // New icon to go back into the UserList/DMList component
 import "./SideBar.css";
-
 import SideBarIcon from "../SideBarIcon/SideBarIcon";
 import Divider from "../Divider/Divider";
 import Popup from "../Popup/Popup";

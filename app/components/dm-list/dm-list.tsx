@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import "./dm-list.css";
+import DefaultDisplay from "./components/message-column/DefaultDisplay";
 
 type User = {
   id: string;

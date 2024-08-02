@@ -9,7 +9,13 @@
 
 .channel-name {
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 700;
+  background-image: url(https://media.giphy.com/media/pJlwmFs6l8uQw/giphy.gif?cid=ecf05e475wax9c59cdufackb3t5iz1172mwmkjqco9g4c78c&ep=v1_gifs_search&rid=giphy.gif&ct=g);
+  background-size: cover;
+  color: transparent;
+  -moz-background-clip: text;
+  -webkit-background-clip: text;
+  text-transform: uppercase;
 }
 
 .nav-icons-container {
