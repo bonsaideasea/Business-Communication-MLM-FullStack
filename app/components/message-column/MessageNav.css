@@ -1,7 +1,6 @@
 .message-navbar {
   border-bottom: 1.5px rgba(156, 163, 175, 0.3) solid;
   padding: 1rem;
-  margin-bottom: 1rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

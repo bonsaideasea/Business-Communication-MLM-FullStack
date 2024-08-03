@@ -1,45 +1,39 @@
+/* app\globals.css */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* @apply warning remove: https://github.com/tailwindlabs/tailwindcss/discussions/5258#discussioncomment-8559596 */
-
-/* Notes: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Aligning_items_in_a_flex_container */
-
+/* Font Family */
 .roboto {
   font-family: var(--font-roboto);
 }
 
+/* Project Container */
 .project-container {
-  @apply flex flex-col w-full h-screen mx-auto;
-  /* bg-gradient-to-r from-green-200 to-green-300 */
-  /* background-image: linear-gradient(to right, #6ee7b7 0%, #34d399 80%); */
   background-color: #86efac;
-  /* background-image: url("./img/mantis.png"); */
-  /* background-size: 10%; */
 }
 
+/* Navbar */
 .navbar {
-  @apply w-full min-h-12 text-2xl content-center text-red-400 border border-red-500;
+  @apply w-full min-h-12 text-2xl flex items-center justify-center text-red-400 border border-red-500;
 }
 
+/* Main Rows */
 .main-rows {
-  @apply flex flex-row flex-grow w-full mx-auto max-w-[1512px];
+  @apply flex flex-row flex-grow w-full h-full mx-auto max-w-[1512px];
 }
 
+/* Side Channels Container */
 .side-channels-container {
   @apply min-w-[72px] border hidden md:block;
-  /*@apply border-sky-500 */
 }
 
+/* Direct Messages Container */
 .direct-messages-container {
   @apply min-w-[360px] border hidden md:block;
-  /*@apply lg:min-w-[360px] border-green-500  */
 }
 
+/* Message Log Container */
 .message-log-container {
-  @apply flex-1 w-[934px] flex-grow border;
-  display: flex;
-  flex-direction: column;
-  /* border-yellow-500 */
+  @apply flex-1 flex flex-col border overflow-y-hidden h-full;
 }

@@ -1,9 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
-    images: {
-      domains: ['res.cloudinary.com', 'lh3.googleusercontent.com'],
-    },
-  };
-  
-  export default nextConfig;
+  reactStrictMode: true,
+  images: {
+    domains: ["res.cloudinary.com", "lh3.googleusercontent.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn3.iconfinder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn4.iconfinder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
