@@ -1,0 +1,27 @@
+.time-container {
+    position: relative;
+    text-align: center;
+
+}
+  
+.time-container::before,
+.time-container::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    width: 43%; 
+    height: 1.2px; 
+    background-color: #84cc16;
+}
+  
+.time-container::before {
+    left: 0;
+    transform: translateY(-50%);
+}
+  
+.time-container::after {
+    right: 0;
+    transform: translateY(-50%); 
+}
+  

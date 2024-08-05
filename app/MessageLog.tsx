@@ -9,9 +9,12 @@ import axios from "axios";
 import { StaticImageData } from "next/image";
 import { currentUser } from "@/lib/current-user";
 import DefaultDisplay from "./components/message-column/DefaultDisplay";
+import "./MessageLog.css"
+
 
 interface Message {
   time: string;
+  date: string;
   text: string;
   id: string;
 }
@@ -128,6 +131,7 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
         if (copyNewUserMessages.length > 0 && copyNewUserMessages[copyNewUserMessages.length - 1].userID === userId) {
           copyNewUserMessages[copyNewUserMessages.length - 1].messages.push({
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             text: message,
             id: messageId
           });
@@ -137,7 +141,8 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
             img: avatar,
             userID: userId,
             messages: [{
-              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              time: new Date().toISOString(),
+              date: new Date().toISOString(),
               text: message,
               id: messageId
             }],
@@ -185,14 +190,12 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
 
   const convertMessageBody = (message: any): Message => {
     const date = new Date(message.createdAt);
-    const hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 || 12;
-    const formattedTime = `${formattedHours}:${minutes} ${ampm}`;
+     const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+     const formattedDate = date.toLocaleDateString(); 
 
     return {
       time: formattedTime,
+      date: formattedDate,
       text: message.content,
       id: message.id
     };
@@ -214,6 +217,31 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
     }
   }, [selectedChannelId]);
 
+  const organizeMessagesByDate = (userMessages: NEWUserMessage[]) => {
+    const organizedMessages: (NEWUserMessage | { date: string })[] = [];
+    let lastDate: string | null = null;
+  
+    userMessages.forEach(userMessage => {
+      userMessage.messages.forEach(message => {
+        const messageDate = message.date; // Use the date from message
+  
+        if (lastDate !== messageDate) {
+          organizedMessages.push({ date: messageDate });
+          lastDate = messageDate;
+        }
+  
+        organizedMessages.push({
+          ...userMessage,
+          messages: [message]
+        });
+      });
+    });
+  
+    return organizedMessages;
+  };  
+
+  const organizedMessages = organizeMessagesByDate(userMessages);
+
   return (
     <>
       {!selectedChannelId ? (
@@ -222,16 +250,22 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
         <>
           <MessageNav channelName={selectedChannelName} channelId={selectedChannelId} />
           <div className="flex flex-col justify-between h-full">
-            <div className="overflow-auto flex-grow h-[500px] max-h-screen">
-              {userMessages.map((userMessage, index) => (
-                <ExistingUserMessages
-                  key={index}
-                  img={userMessage.img || avatar}
-                  name={userMessage.name}
-                  userID={userMessage.userID}
-                  messages={userMessage.messages}
-                />
-              ))}
+            <div className="overflow-auto flex-grow max-h-[720px]">
+              {organizedMessages.map((item, index) =>
+                'date' in item ? (
+                  <div key={index} className="time-container text-lime-500">
+                    {item.date}
+                  </div>
+                ) : (
+                  <ExistingUserMessages
+                    key={index}
+                    img={item.img || avatar}
+                    name={item.name}
+                    userID={item.userID}
+                    messages={item.messages}
+                  />
+                )
+              )}
             </div>
             <div className="px-2 border-t">
               <MessageInput onSendMessage={sendMessage} />
