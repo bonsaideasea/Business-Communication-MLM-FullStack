@@ -12,6 +12,7 @@ import DefaultDisplay from "./components/message-column/DefaultDisplay";
 import "./MessageLog.css"
 
 
+
 interface Message {
   time: string;
   date: string;
@@ -250,8 +251,8 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
         <>
           <MessageNav channelName={selectedChannelName} channelId={selectedChannelId} />
           <div className="flex flex-col justify-between h-full">
-            <div className="overflow-auto flex-grow max-h-[720px]">
-              {organizedMessages.map((item, index) =>
+            <div className="overflow-auto flex-grow max-h-[490px]">
+             {organizedMessages.map((item, index) =>
                 'date' in item ? (
                   <div key={index} className="time-container text-lime-500">
                     {item.date}

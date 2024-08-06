@@ -1,4 +1,5 @@
 "use client";
+
 import { currentUser } from "@/lib/current-user";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
@@ -8,21 +9,30 @@ import UserProfileFooter from "./UserProfileFooter";
 import ChannelList from "./components/ChannelList/ChannelList";
 import SideBar from "./components/SideBar/SideBar/SideBar";
 import UserList from "./components/dm-list/dm-list";
+import DefaultDisplay from "./components/message-column/DefaultDisplay";
 
 export default function Home() {
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
-  const [selectedChannelName, setSelectedChannelName] = useState<string>("");
   const [selectedChannelId, setSelectedChannelId] = useState<string>("");
+  const [selectedChannelName, setSelectedChannelName] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
+  const [showDefaultDisplay, setShowDefaultDisplay] = useState(false); // State for DefaultDisplay
 
   useEffect(() => {
     const fetchUser = async () => {
       const user: User | null = await currentUser();
       if (user) setUser(user);
     };
-
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (!selectedServerId) {
+      setShowDefaultDisplay(true);
+    } else {
+      setShowDefaultDisplay(false);
+    }
+  }, [selectedServerId]);
 
   if (!user) return null;
 
@@ -33,7 +43,13 @@ export default function Home() {
         <div className="main-rows bg-white h-full">
           {/* Side Channels Container */}
           <div className="side-channels-container">
-            <SideBar onSelectServer={setSelectedServerId} />
+            {/* <SideBar onSelectServer={setSelectedServerId} /> */}
+            <SideBar 
+              onSelectServer={(serverId) => {
+                setSelectedServerId(serverId);
+                setShowDefaultDisplay(false); // Hide DefaultDisplay when a server is selected
+              }} 
+            />
           </div>
 
           {/* Messages Bar */}
@@ -59,11 +75,15 @@ export default function Home() {
 
           {/* Message Log Container */}
           <div className="message-log-container">
-            <MessageLog
-              channelName={selectedChannelName}
-              channelId={selectedChannelId}
-            />
-          </div>
+          {showDefaultDisplay ? (
+              <DefaultDisplay /> // Show DefaultDisplay when the state is true
+            ) : (
+                <MessageLog
+                  channelName={selectedChannelName}
+                  channelId={selectedChannelId}
+                />
+            )}
+            </div>
         </div>
       </div>
     </div>
