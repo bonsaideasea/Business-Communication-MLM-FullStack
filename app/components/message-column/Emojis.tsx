@@ -9,7 +9,12 @@ interface Emoji {
     unicodeName: string;
 }
 
-const EmojiMenu = () => {
+interface EmojiMenuProps {
+    onSelectEmoji: (emoji: string) => void;
+}
+
+
+const EmojiMenu =  ( {onSelectEmoji} : EmojiMenuProps ) => {
     const [emojis, setEmojis] = useState<Emoji[]>([]);
     const [searchUnicode, setSearchUnicode] = useState<string>("");
 
@@ -31,11 +36,15 @@ const EmojiMenu = () => {
     );
 
     return (
-        <div className="flex flex-col items-center w-80">
+        <div className="flex flex-col items-center w-80 cursor-default">
             <SearchBar onSearchChange={handleSearchBar} />
             <ul className="emoji-list mt-2 p-4 bg-zinc-800 text-white h-80 rounded-xl w-full grid grid-cols-[repeat(auto-fill,minmax(1.5rem,1fr))] gap-2 overflow-y-auto ring-2 ring-green-500">
                 {filteredEmojis.map((emoji, index) => (
-                    <li key={index} title={emoji.unicodeName} className="text-2xl">
+                    <li key={index} 
+                        title={emoji.unicodeName} 
+                        className="text-2xl"
+                        onClick={() => onSelectEmoji(emoji.character)}
+                    >
                         {emoji.character}
                     </li>
                 ))}

@@ -42,7 +42,7 @@ const MessageInput = ({ onSendMessage } : Props) => {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  });
+  }, [emojiMenuOpen]);
 
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setTypedMessage(e.target.value);
@@ -51,6 +51,12 @@ const MessageInput = ({ onSendMessage } : Props) => {
   const openEmojiMenu = () => {
     setEmojiMenuOpen(!emojiMenuOpen)
   }
+
+  const handleSelectEmoji = (emoji: string) => {
+    setTypedMessage(typedMessage + emoji);
+    setEmojiMenuOpen(false); // Close menu after selecting an emoji
+  };
+
 
   return (
     <div className="input-container">
@@ -78,7 +84,7 @@ const MessageInput = ({ onSendMessage } : Props) => {
       </div>
       {emojiMenuOpen && (
           <div className="emoji-menu">
-              <EmojiMenu />
+              <EmojiMenu onSelectEmoji={handleSelectEmoji}/>
           </div>
       )}
     </div>
