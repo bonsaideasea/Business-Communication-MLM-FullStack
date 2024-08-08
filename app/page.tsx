@@ -10,6 +10,7 @@ import ChannelList from "./components/ChannelList/ChannelList";
 import SideBar from "./components/SideBar/SideBar/SideBar";
 import UserList from "./components/dm-list/dm-list";
 import DefaultDisplay from "./components/message-column/DefaultDisplay";
+import Head from "next/head";
 
 export default function Home() {
   const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
