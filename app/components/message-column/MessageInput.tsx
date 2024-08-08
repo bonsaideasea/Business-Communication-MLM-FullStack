@@ -54,7 +54,7 @@ const MessageInput = ({ onSendMessage } : Props) => {
 
   const handleSelectEmoji = (emoji: string) => {
     setTypedMessage(typedMessage + emoji);
-    setEmojiMenuOpen(false); // Close menu after selecting an emoji
+    setEmojiMenuOpen(false); 
   };
 
 

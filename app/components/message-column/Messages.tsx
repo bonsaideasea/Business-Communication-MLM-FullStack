@@ -3,6 +3,7 @@ import { BiTrashAlt } from "react-icons/bi";
 import { TbMoodSmile, TbPencil } from "react-icons/tb";
 import React, { useState, useEffect } from "react";
 import "./Messages.css";
+import EmojiMenu from "./Emojis";
 
 interface Message {
   id: string;
@@ -22,6 +23,7 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedMessage, setUpdatedMessage] = useState('');
   const [messageList, setMessageList] = useState<Message[]>(messages);
+  const [emojiMenuOpen, setEmojiMenuOpen] = useState<boolean>(false);
 
   const deleteMessage = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, messageId: string )  => { 
     const deleteThisMessage = event.currentTarget.closest('.text-message') 
@@ -96,6 +98,31 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
     setIsEditing(true);
   };
 
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && emojiMenuOpen) {
+        setEmojiMenuOpen(false);
+      }
+    };
+  
+    document.addEventListener("keydown", handleEscapeKey);
+  
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [emojiMenuOpen]);
+
+  const openEmojiMenu = () => {
+    setEmojiMenuOpen(!emojiMenuOpen)
+  }
+
+  const handleSelectEmoji = (emoji: string) => {
+    setUpdatedMessage((prev) => prev + emoji);
+    setEmojiMenuOpen(false); 
+  };
+
+
+
   return (
     <div className='message-entry-container'>
       {messageList.length > 0 && (
@@ -140,13 +167,20 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
                     <button
                       id="edit-pencil" onClick={() => handleEditClick(message.id, message.text)}
                     >
-                      <TbPencil className="edit-icon" />
+                        <TbPencil className="edit-icon" />
                     </button>
-                    <button id="react-smile"><TbMoodSmile className="edit-icon" id="emoji-icon"/></button>
+                    <button id="react-smile" onClick={openEmojiMenu}>
+                        <TbMoodSmile className="edit-icon" id="emoji-icon"/>
+                    </button>
                     <button id="delete-trash" onClick={(event) => deleteMessage(event, message.id)}>
-                      <BiTrashAlt className="edit-icon" style={{ color: "red" }} />
+                        <BiTrashAlt className="edit-icon" style={{ color: "red" }} />
                     </button>
                   </div>
+                  {emojiMenuOpen && (
+                      <div className="emoji-menu">
+                         <EmojiMenu onSelectEmoji={handleSelectEmoji}/>
+                      </div>
+                  )}
               </div>
             ))}
           </div>
