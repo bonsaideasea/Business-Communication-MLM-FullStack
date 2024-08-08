@@ -142,7 +142,7 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
                     >
                       <TbPencil className="edit-icon" />
                     </button>
-                    <button id="react-smile"><TbMoodSmile className="edit-icon" /></button>
+                    <button id="react-smile"><TbMoodSmile className="edit-icon" id="emoji-icon"/></button>
                     <button id="delete-trash" onClick={(event) => deleteMessage(event, message.id)}>
                       <BiTrashAlt className="edit-icon" style={{ color: "red" }} />
                     </button>

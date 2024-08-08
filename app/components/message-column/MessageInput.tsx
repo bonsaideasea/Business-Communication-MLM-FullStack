@@ -3,14 +3,17 @@ import { FiPaperclip } from "react-icons/fi";
 import { LuSend } from "react-icons/lu";
 import { TbMoodSmile } from "react-icons/tb";
 import "./MessageInput.css";
+import EmojiMenu from "./Emojis";
+
 
 interface Props {
   onSendMessage: (message: string) => void;
 }
 
 
-const MessageInput= ({ onSendMessage } : Props) => {
+const MessageInput = ({ onSendMessage } : Props) => {
   const [typedMessage, setTypedMessage] = useState<string>("");
+  const [emojiMenuOpen, setEmojiMenuOpen] = useState<boolean>(false);
 
   const handleSubmit = ( e: FormEvent<HTMLFormElement> ) => {
     e.preventDefault(); 
@@ -23,10 +26,6 @@ const MessageInput= ({ onSendMessage } : Props) => {
 
    useEffect(() => {
     const keyDownHandler = (e: any )  => {
-      if (e && e.key) {
-        console.log("user pressed " + e.key);
-      }
-
       if (e.key === 'Enter') {
         e.preventDefault();
         handleSubmit(e);
@@ -44,6 +43,9 @@ const MessageInput= ({ onSendMessage } : Props) => {
     setTypedMessage(e.target.value);
   };
 
+  const openEmojiMenu = () => {
+    setEmojiMenuOpen(!emojiMenuOpen)
+  }
 
   return (
     <div className="input-container">
@@ -64,11 +66,16 @@ const MessageInput= ({ onSendMessage } : Props) => {
         </div>
       </form>
       <div className="message-features">
-        <div className="input-icons-container">
-          <FiPaperclip className="input-icon" />
-          <TbMoodSmile className="input-icon" />
-        </div>
+        <ul className="input-icons-container">
+          <li><FiPaperclip className="input-icon" /></li>
+          <li id="react-smile" onClick={openEmojiMenu}><TbMoodSmile className="input-icon" id="emoji-icon"/></li>
+        </ul>
       </div>
+      {emojiMenuOpen && (
+          <div className="emoji-menu">
+              <EmojiMenu />
+          </div>
+      )}
     </div>
   );
 };

@@ -12,7 +12,6 @@ import DefaultDisplay from "./components/message-column/DefaultDisplay";
 import "./MessageLog.css"
 
 
-
 interface Message {
   time: string;
   date: string;

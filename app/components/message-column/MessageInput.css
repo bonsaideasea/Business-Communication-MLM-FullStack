@@ -62,3 +62,8 @@ textarea {
   top: 0.5px;
   right: 1px;
 }
+
+.emoji-menu {
+  position: absolute;
+  top: 1px;
+}
