@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MessageInput from "./components/message-column/MessageInput";
 import MessageNav from "./components/message-column/MessageNav";
 import ExistingUserMessages from "./components/message-column/Messages";
@@ -10,7 +10,6 @@ import { StaticImageData } from "next/image";
 import { currentUser } from "@/lib/current-user";
 import DefaultDisplay from "./components/message-column/DefaultDisplay";
 import "./MessageLog.css"
-
 
 interface Message {
   time: string;
@@ -36,6 +35,8 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
   const [currentUserId, setCurrentUserId] = useState<string>("");
   const [selectedChannelName, setSelectedChannelName] = useState<string>(channelName);
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
+
+  const messageContainerRef = useRef<HTMLDivElement>(null);
 
   const channelIDTemplate = `${channelId}`;
   const channelNameTemplate = `${channelName}`;
@@ -242,6 +243,13 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
 
   const organizedMessages = organizeMessagesByDate(userMessages);
 
+  useEffect(() => {
+    // Scroll to the bottom of the message container
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+    }
+  }, [organizedMessages]);
+
   return (
     <>
       {!selectedChannelId ? (
@@ -250,8 +258,11 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
         <>
           <MessageNav channelName={selectedChannelName} channelId={selectedChannelId} />
           <div className="flex flex-col justify-between h-full">
-            <div className="overflow-auto flex-grow h-[490px] max-h-screen">
-             {organizedMessages.map((item, index) =>
+            <div
+              className="overflow-auto flex-grow h-[492px] max-h-screen"
+              ref={messageContainerRef}
+            >
+              {organizedMessages.map((item, index) =>
                 'date' in item ? (
                   <div key={index} className="time-container text-lime-500">
                     {item.date}
