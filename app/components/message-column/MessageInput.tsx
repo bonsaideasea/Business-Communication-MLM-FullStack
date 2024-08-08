@@ -5,47 +5,33 @@ import { TbMoodSmile } from "react-icons/tb";
 import "./MessageInput.css";
 import EmojiMenu from "./Emojis";
 
-
 interface Props {
   onSendMessage: (message: string) => void;
 }
 
-
-const MessageInput = ({ onSendMessage } : Props) => {
+const MessageInput = ({ onSendMessage }: Props) => {
   const [typedMessage, setTypedMessage] = useState<string>("");
   const [emojiMenuOpen, setEmojiMenuOpen] = useState<boolean>(false);
 
   const emojiMenuRef = useRef<HTMLDivElement | null>(null);
 
-
-  const handleSubmit = ( e: FormEvent<HTMLFormElement> ) => {
-    e.preventDefault(); 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (typedMessage.trim() !== "") {
       onSendMessage(typedMessage);
       setTypedMessage("");
-      console.log("the Message: ", typedMessage);
+      console.log("Message sent: ", typedMessage);
     }
-  }
+  };
 
-   useEffect(() => {
-    const keyDownHandler = (e: any )  => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleSubmit(e);
-      }
-
-
-      if (e.key === "Escape" && emojiMenuOpen) {
-        setEmojiMenuOpen(false);
-      }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as unknown as FormEvent<HTMLFormElement>);
+    } else if (e.key === "Escape" && emojiMenuOpen) {
+      setEmojiMenuOpen(false);
     }
-  
-    document.addEventListener('keydown', keyDownHandler)
-  
-    return () => {
-      document.removeEventListener('keydown', keyDownHandler);
-    };
-  }, [emojiMenuOpen]);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -70,14 +56,13 @@ const MessageInput = ({ onSendMessage } : Props) => {
   };
 
   const openEmojiMenu = () => {
-    setEmojiMenuOpen(!emojiMenuOpen)
-  }
-
-  const handleSelectEmoji = (emoji: string) => {
-    setTypedMessage(typedMessage + emoji);
-    setEmojiMenuOpen(false); 
+    setEmojiMenuOpen(!emojiMenuOpen);
   };
 
+  const handleSelectEmoji = (emoji: string) => {
+    setTypedMessage((prevMessage) => prevMessage + emoji);
+    setEmojiMenuOpen(false);
+  };
 
   return (
     <div className="input-container">
@@ -87,6 +72,7 @@ const MessageInput = ({ onSendMessage } : Props) => {
           placeholder="Type Message..."
           value={typedMessage}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}  // Attach keyDown event here
         />
         <div className="submit-button">
           <button type="submit">
@@ -99,19 +85,21 @@ const MessageInput = ({ onSendMessage } : Props) => {
       </form>
       <div className="message-features w-100">
         <ul className="input-icons-container">
-          <li><FiPaperclip className="input-icon" /></li>
-          <li id="react-smile" onClick={openEmojiMenu}><TbMoodSmile className="input-icon" id="emoji-icon"/></li>
+          <li>
+            <FiPaperclip className="input-icon" />
+          </li>
+          <li id="react-smile" onClick={openEmojiMenu}>
+            <TbMoodSmile className="input-icon" id="emoji-icon" />
+          </li>
         </ul>
       </div>
       {emojiMenuOpen && (
-          <div className="emoji-menu" ref={emojiMenuRef}>
-              <EmojiMenu onSelectEmoji={handleSelectEmoji}/>
-          </div>
+        <div className="emoji-menu" ref={emojiMenuRef}>
+          <EmojiMenu onSelectEmoji={handleSelectEmoji} />
+        </div>
       )}
     </div>
   );
 };
 
 export default MessageInput;
-
-
