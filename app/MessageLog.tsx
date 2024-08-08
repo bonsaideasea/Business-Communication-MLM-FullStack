@@ -250,7 +250,7 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
         <>
           <MessageNav channelName={selectedChannelName} channelId={selectedChannelId} />
           <div className="flex flex-col justify-between h-full">
-            <div className="overflow-auto flex-grow h-[492-px] max-h-screen">
+            <div className="overflow-auto flex-grow h-[490-px] max-h-screen">
              {organizedMessages.map((item, index) =>
                 'date' in item ? (
                   <div key={index} className="time-container text-lime-500">
