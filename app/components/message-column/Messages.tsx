@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import { BiTrashAlt } from "react-icons/bi";
 import { TbMoodSmile, TbPencil } from "react-icons/tb";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Messages.css";
 import EmojiMenu from "./Emojis";
 
@@ -24,6 +24,9 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
   const [updatedMessage, setUpdatedMessage] = useState('');
   const [messageList, setMessageList] = useState<Message[]>(messages);
   const [emojiMenuOpen, setEmojiMenuOpen] = useState<boolean>(false);
+
+  const emojiMenuRef = useRef<HTMLDivElement | null>(null);
+
 
   const deleteMessage = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, messageId: string )  => { 
     const deleteThisMessage = event.currentTarget.closest('.text-message') 
@@ -112,6 +115,24 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
     };
   }, [emojiMenuOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emojiMenuRef.current && !emojiMenuRef.current.contains(event.target as Node)) {
+        setEmojiMenuOpen(false);
+      }
+    };
+
+    if (emojiMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [emojiMenuOpen]);
+
   const openEmojiMenu = () => {
     setEmojiMenuOpen(!emojiMenuOpen)
   }
@@ -120,7 +141,6 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
     setUpdatedMessage((prev) => prev + emoji);
     setEmojiMenuOpen(false); 
   };
-
 
 
   return (
@@ -177,7 +197,7 @@ const ExistingUserMessages = ({ img, name, messages }: Props) => {
                     </button>
                   </div>
                   {emojiMenuOpen && (
-                      <div className="emoji-menu">
+                      <div className="emoji-menu" ref={emojiMenuRef}>
                          <EmojiMenu onSelectEmoji={handleSelectEmoji}/>
                       </div>
                   )}

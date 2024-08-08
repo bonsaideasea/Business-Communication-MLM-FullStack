@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent, useEffect, KeyboardEvent } from "react";
+import React, { useState, FormEvent, ChangeEvent, useEffect, useRef } from "react";
 import { FiPaperclip } from "react-icons/fi";
 import { LuSend } from "react-icons/lu";
 import { TbMoodSmile } from "react-icons/tb";
@@ -14,6 +14,9 @@ interface Props {
 const MessageInput = ({ onSendMessage } : Props) => {
   const [typedMessage, setTypedMessage] = useState<string>("");
   const [emojiMenuOpen, setEmojiMenuOpen] = useState<boolean>(false);
+
+  const emojiMenuRef = useRef<HTMLDivElement | null>(null);
+
 
   const handleSubmit = ( e: FormEvent<HTMLFormElement> ) => {
     e.preventDefault(); 
@@ -41,6 +44,24 @@ const MessageInput = ({ onSendMessage } : Props) => {
   
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [emojiMenuOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emojiMenuRef.current && !emojiMenuRef.current.contains(event.target as Node)) {
+        setEmojiMenuOpen(false);
+      }
+    };
+
+    if (emojiMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [emojiMenuOpen]);
 
@@ -83,7 +104,7 @@ const MessageInput = ({ onSendMessage } : Props) => {
         </ul>
       </div>
       {emojiMenuOpen && (
-          <div className="emoji-menu">
+          <div className="emoji-menu" ref={emojiMenuRef}>
               <EmojiMenu onSelectEmoji={handleSelectEmoji}/>
           </div>
       )}
