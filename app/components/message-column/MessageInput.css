@@ -32,9 +32,10 @@ textarea {
   align-items: center;
   border-top: 1.5px rgba(156, 163, 175, 0.55) solid;
   height: 2.5em;
-  padding-left: 0.5em;
+  padding-right: 1em;
   padding-top: 0;
   background-color: rgba(189, 242, 121, 0.21);
+  justify-content: flex-end;
 }
 
 .submit-button {
@@ -65,5 +66,5 @@ textarea {
 
 .emoji-menu {
   position: absolute;
-  top: 1px;
+  transform: translate(563px, -390px);
 }

@@ -30,6 +30,11 @@ const MessageInput = ({ onSendMessage } : Props) => {
         e.preventDefault();
         handleSubmit(e);
       }
+
+
+      if (e.key === "Escape" && emojiMenuOpen) {
+        setEmojiMenuOpen(false);
+      }
     }
   
     document.addEventListener('keydown', keyDownHandler)
@@ -65,7 +70,7 @@ const MessageInput = ({ onSendMessage } : Props) => {
           </button>
         </div>
       </form>
-      <div className="message-features">
+      <div className="message-features w-100">
         <ul className="input-icons-container">
           <li><FiPaperclip className="input-icon" /></li>
           <li id="react-smile" onClick={openEmojiMenu}><TbMoodSmile className="input-icon" id="emoji-icon"/></li>
