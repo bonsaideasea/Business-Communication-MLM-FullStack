@@ -224,7 +224,7 @@ const MessageLog = ({ channelName, channelId }: MessageLogProps) => {
   
     userMessages.forEach(userMessage => {
       userMessage.messages.forEach(message => {
-        const messageDate = message.date; // Use the date from message
+        const messageDate = message.date; 
   
         if (lastDate !== messageDate) {
           organizedMessages.push({ date: messageDate });
